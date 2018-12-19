@@ -3,6 +3,8 @@
 # This pre-push script runs on your local machine whenever you attempt a git push.
 # Currently, this script checks for any critical updates from master that are needed to keep the CI machines functional.
 
+echo "in pre push script"
+
 red='\033[0;31m'
 green='\033[0;32m'
 nc='\033[0m'
