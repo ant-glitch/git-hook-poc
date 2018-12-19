@@ -1,1 +1,3 @@
 # git-hook-poc
+
+TEST
