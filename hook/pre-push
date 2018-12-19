@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# This pre-push script runs on your local machine whenever you attempt a git push.
+# Currently, this script checks for any critical updates from master that are needed to keep the CI machines functional.
+
+red='\033[0;31m'
+green='\033[0;32m'
+nc='\033[0m'
+
+# Assume that remote is named origin, but do a check just in case
+if [ git remote | grep "origin" ]
+then
+	echo "Checking for any mandatory changes from origin master...\n"
+else
+	echo "Git remote \"origin\" not found. Unable to perform pre-push action.\n"
+	exit 1
+fi
+
+# Fetch latest commits from remote master branch
+git fetch origin master
+
+# Perform diff between current branch and master, check for keyword that denotes a critical change is needed
+if [ git log --oneline --full-diff --left-only origin/master --grep "\[force-merge\]" ]
+then
+	printf "\n${red}Critical changes needed from master. Unable to push changes.${nc} Merge in the latest from the master branch and try again.\n\n"
+	exit 1
+fi
+
+printf "\n${green}No critical updates needed!${nc} But, it is usually a good idea to keep up to date with master."
+
+exit 0
