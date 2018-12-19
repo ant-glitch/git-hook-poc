@@ -22,7 +22,7 @@ fi
 git fetch origin master
 
 # Perform diff between current branch and master, check for keyword that denotes a critical change is needed
-if [ git log --oneline --full-diff --left-only origin/master --grep "\[force-merge\]" ]
+if [ `git log --oneline --full-diff --left-only origin/master --grep "\[force-merge\]"` ]
 then
 	printf "\n${red}Critical changes needed from master. Unable to push changes.${nc} Merge in the latest from the master branch and try again.\n\n"
 	exit 1
