@@ -10,7 +10,7 @@ green='\033[0;32m'
 nc='\033[0m'
 
 # Assume that remote is named origin, but do a check just in case
-if [ git remote | grep "origin" ]
+if [ `git remote | grep "origin"` ]
 then
 	echo "Checking for any mandatory changes from origin master...\n"
 else
