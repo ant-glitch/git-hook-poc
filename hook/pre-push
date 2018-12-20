@@ -3,7 +3,7 @@
 # This pre-push script runs on your local machine whenever you attempt a git push.
 # Currently, this script checks for any critical updates from master that are needed to keep the CI machines functional.
 
-fish='\134\165\061\106\064\062\060'
+fish='🐠'
 red='\033[0;31m'
 green='\033[0;32m'
 nc='\033[0m'
