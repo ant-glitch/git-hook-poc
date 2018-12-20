@@ -3,33 +3,39 @@
 # This pre-push script runs on your local machine whenever you attempt a git push.
 # Currently, this script checks for any critical updates from master that are needed to keep the CI machines functional.
 
-echo "in pre push script"
-
+fish='\134\165\061\106\064\062\060'
 red='\033[0;31m'
 green='\033[0;32m'
 nc='\033[0m'
 
+printLine(){
+	printf "\n${fish} $1\n\n"
+}
+
 # Assume that remote is named origin, but do a check just in case
-if [ `git remote | grep "origin"` ]
+if [ -n `git remote | grep "origin"` ]
 then
-	echo "Checking for any mandatory changes from origin master...\n"
+	printLine "Checking for any mandatory changes from origin master..."
 else
-	echo "Git remote \"origin\" not found. Unable to perform pre-push action.\n"
+	printLine "Git remote \"origin\" not found. Unable to perform pre-push action. \n DONE. Exiting with error code 1."
 	exit 1
 fi
 
 # Fetch latest commits from remote master branch
+printLine "Fetching latest commits from origin master..."
 git fetch origin master
 
 # Perform diff between current branch and master, check for keyword that denotes a critical change is needed
 CHECK=$(git log --oneline --full-diff --left-only origin/master... | grep "\[force-merge\]")
 
+printLine "Comparing master to current branch..."
 if [ -n "$CHECK" ]
 then
-	printf "\n${red}Critical changes needed from master. Unable to push changes.${nc} Merge in the latest from the master branch and try again.\n\n"
-	exit 1
+	printLine "${red}Critical changes needed from master. Unable to push changes. Merge in the latest from the master branch and try again.${nc}"
+	printLine "DONE. \nExiting with error code 2."
+	exit 2
 fi
 
-printf "\n${green}No critical updates needed!${nc} But, it is usually a good idea to keep up to date with master."
+printLine "${green}No critical updates needed!${nc} \nBut, it is usually a good idea to keep up to date with master."
 
 exit 0
